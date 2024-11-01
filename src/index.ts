@@ -81,7 +81,7 @@ function setDefaults() {
     showHost: true,
     showPath: true,
     showGit: true,
-    powerFont: false
+    powerFont: true
     //parentDirMaxLen: 1,
     //parentDirEllipsis: '\u2026',
     //maxDirs: 4,
