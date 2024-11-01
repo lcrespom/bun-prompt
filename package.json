@@ -2,6 +2,9 @@
   "name": "luis-prompt",
   "module": "index.ts",
   "type": "module",
+  "scripts": {
+    "start": "bun run src/index.ts"
+  },
   "devDependencies": {
     "@types/bun": "latest",
     "prettier": "^3.3.3"
@@ -9,7 +12,7 @@
   "peerDependencies": {
     "typescript": "^5.0.0"
   },
-  "scripts": {
-    "start": "bun run src/index.ts"
+  "dependencies": {
+    "chalk": "^3.0.0"
   }
 }
