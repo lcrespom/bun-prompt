@@ -1,15 +1,10 @@
-# luis-prompt
+# bun-prompt
 
-To install dependencies:
-
-```bash
-bun install
-```
-
-To run:
+A script that generates the full prompt. It can be setup by configuring the $PROMPT
+environment variable like this:
 
 ```bash
-bun run index.ts
+PROMPT='$(HOST=$HOST bun index.ts)'
 ```
 
-This project was created using `bun init` in bun v1.1.33. [Bun](https://bun.sh) is a fast all-in-one JavaScript runtime.
+The prompt settings can be configured by editing file `settings.ts`.
