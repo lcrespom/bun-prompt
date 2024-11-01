@@ -1,5 +1,4 @@
 import { execFileSync } from 'child_process'
-import * as runner from '../../runner'
 
 type Counters = Record<string, number>
 
@@ -29,27 +28,16 @@ function runCommand(cmd: string) {
   try {
     let args = cmd.split(' ')
     let options = { stdio: ['ignore', 'pipe', 'ignore'] }
+    //@ts-ignore
     return execFileSync(args[0], args.slice(1), options).toString().trim().split('\n')
   } catch (err) {
     return null
   }
 }
 
-async function runRemoteCommand(cmd: string) {
-  let out = await runner.runHiddenCommand(cmd + ';echo $?')
-  let lines = out
-    .trim()
-    .split('\n')
-    .map(l => l.trimEnd())
-  if (!lines || lines.length == 0) return null
-  let rc = lines.pop()
-  if (rc !== '0') return null
-  return lines
-}
-
 function parseBranch(line: string) {
   if (!line.startsWith('## ')) return null
-  return line.substr(3).split('...')[0]
+  return line.substring(3).split('...')[0]
 }
 
 function parseRemoteBranch(branch: string | null, line: string) {
@@ -81,7 +69,7 @@ function totalCounters(ctrs: Counters) {
 }
 
 function isConflict(line: string) {
-  let xy = line.substr(0, 2)
+  let xy = line.substring(0, 2)
   return 'DD-AU-UD-UA-DU-AA-UU'.includes(xy)
 }
 
@@ -106,9 +94,9 @@ function parseGitStatus(lines: string[]) {
   return { branch, index, tree, conflicts, dirty, ahead, behind }
 }
 
-export async function gitStatus(isRemote: boolean) {
+export async function gitStatus() {
   let cmd = 'git status --porcelain -b'
-  let lines = isRemote ? await runRemoteCommand(cmd) : runCommand(cmd)
+  let lines = runCommand(cmd)
   if (!lines || lines.length == 0 || !lines[0]) return null
   return parseGitStatus(lines)
 }

@@ -1,7 +1,6 @@
 import * as chalkModule from 'chalk'
 
 import { ucfirst } from './utils'
-import { getOption } from './startup'
 
 type StringMapper = (str: string) => string
 
@@ -9,9 +8,7 @@ let chalk: any = null
 
 function getChalk() {
   if (chalk) return chalk
-  let trueColor = getOption('colors.trueColor')
-  if (trueColor) chalk = new chalkModule.Instance({ level: 3 })
-  else chalk = chalkModule
+  chalk = new chalkModule.Instance({ level: 3 })
   return chalk
 }
 

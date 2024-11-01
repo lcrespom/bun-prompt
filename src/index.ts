@@ -1,5 +1,4 @@
 import { gitStatus, gitStatusFlags } from './git-status'
-import { PromptInput, setPrompt } from '../../prompt'
 import { colorize } from './colors'
 import { ucfirst } from './utils'
 
@@ -7,8 +6,8 @@ let colors: Record<string, string>
 let promptConfig: Record<string, boolean | string | number>
 const GIT_SYMBOL = '\ue0a0'
 
-async function gitSection(isRemote: boolean) {
-  let gstatus = await gitStatus(isRemote)
+async function gitSection() {
+  let gstatus = await gitStatus()
   if (!gstatus) return ''
   let flags = gitStatusFlags(gstatus, { unicode: promptConfig.powerFont as boolean })
   if (flags) flags = ' ' + flags
@@ -48,16 +47,15 @@ function segment(name: string, value: string) {
   return colorize(colors[name], value)
 }
 
-async function prompt({ cwd, username, hostname, isRemote }: PromptInput) {
+async function prompt({ cwd, username, hostname }) {
   let userAtHost = segment('user', username) + segment('at', '@')
   if (promptConfig.showHost) {
-    let hostCol = isRemote ? colors.remoteHost : colors.host
-    userAtHost += colorize(hostCol, hostname)
+    userAtHost += colorize(colors.host, hostname)
   }
   let path = ''
   if (promptConfig.showPath) path = colorize(colors.path, makePath(cwd))
   let git = '> '
-  if (promptConfig.showGit) git = (await gitSection(!!isRemote)) || '> '
+  if (promptConfig.showGit) git = (await gitSection()) || '> '
   return userAtHost + ' ' + path + git
 }
 
@@ -87,7 +85,7 @@ function setDefaults() {
 
 function main() {
   setDefaults()
-  setPrompt(prompt)
+  prompt({})
 }
 
 main()
