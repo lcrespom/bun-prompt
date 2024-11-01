@@ -2,6 +2,12 @@ import { gitStatus, gitStatusFlags } from './git-status'
 import { colorize } from './colors'
 import { ucfirst } from './utils'
 
+type PromptInput = {
+  cwd: string
+  username: string
+  hostname: string
+}
+
 let colors: Record<string, string>
 let promptConfig: Record<string, boolean | string | number>
 const GIT_SYMBOL = '\ue0a0'
@@ -47,7 +53,7 @@ function segment(name: string, value: string) {
   return colorize(colors[name], value)
 }
 
-async function prompt({ cwd, username, hostname }) {
+async function prompt({ cwd, username, hostname }: PromptInput) {
   let userAtHost = segment('user', username) + segment('at', '@')
   if (promptConfig.showHost) {
     userAtHost += colorize(colors.host, hostname)
@@ -85,7 +91,10 @@ function setDefaults() {
 
 function main() {
   setDefaults()
-  prompt({})
+  let cwd = process.env.PWD || '($PWD not found)'
+  let username = process.env.USER || '($USER not found)'
+  let hostname = process.env.HOST || '($HOST not found)'
+  prompt({cwd,username,hostname})
 }
 
 main()
