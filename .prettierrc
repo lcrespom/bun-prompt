@@ -3,7 +3,6 @@
   "singleQuote": true,
   "useTabs": false,
   "arrowParens": "avoid",
-  "trailingComma": "es5",
-  "printWidth": 90,
-  "plugins": ["prettier-plugin-tailwindcss"]
+  "trailingComma": "none",
+  "printWidth": 90
 }
