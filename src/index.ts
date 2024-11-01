@@ -89,12 +89,12 @@ function setDefaults() {
   }
 }
 
-function main() {
+async function main() {
   setDefaults()
   let cwd = process.env.PWD || '($PWD not found)'
   let username = process.env.USER || '($USER not found)'
   let hostname = process.env.HOST || '($HOST not found)'
-  prompt({ cwd, username, hostname })
+  console.log(await prompt({ cwd, username, hostname }))
 }
 
 main()
