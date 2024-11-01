@@ -1,6 +1,7 @@
 import { gitStatus, gitStatusFlags } from './git-status'
 import { colorize } from './colors'
 import { ucfirst } from './utils'
+import { colors, promptConfig } from './settings'
 
 type PromptInput = {
   cwd: string
@@ -8,8 +9,6 @@ type PromptInput = {
   hostname: string
 }
 
-let colors: Record<string, string>
-let promptConfig: Record<string, boolean | string | number>
 const GIT_SYMBOL = '\ue0a0'
 
 async function gitSection() {
@@ -65,33 +64,10 @@ async function prompt({ cwd, username, hostname }: PromptInput) {
   return userAtHost + ' ' + path + git
 }
 
-function setDefaults() {
-  colors = {
-    user: 'magentaBright',
-    at: 'cyanBright',
-    host: 'greenBright',
-    remoteHost: 'redBright',
-    path: 'cyan',
-    gitDirty: 'yellow',
-    gitClean: 'green'
-  }
-  promptConfig = {
-    showUser: true,
-    showAt: true,
-    showHost: true,
-    showPath: true,
-    showGit: true,
-    powerFont: true
-    //parentDirMaxLen: 1,
-    //parentDirEllipsis: '\u2026',
-    //maxDirs: 4,
-    //maxDirEllipsis: '...'
-  }
-}
-
 async function main() {
-  setDefaults()
   let cwd = process.env.PWD || '($PWD not found)'
+  let home = process.env.HOME || '($HOME not found)'
+  if (cwd.startsWith(home)) cwd = '~' + cwd.substring(home.length)
   let username = process.env.USER || '($USER not found)'
   let hostname = process.env.HOST || '($HOST not found)'
   console.log(await prompt({ cwd, username, hostname }))
